@@ -1,0 +1,284 @@
+.DS_Store
+.un~
+.swp
+# This file is for SOURCE projects, where there are many extra
+# files that we want to exclude
+#
+#########################
+
+#####
+# OS X temporary files that should never be committed
+#
+# c.f. http://www.westwind.com/reference/os-x/invisibles.html
+
+.DS_Store
+
+# c.f. http://www.westwind.com/reference/os-x/invisibles.html
+
+.Trashes
+
+# c.f. http://www.westwind.com/reference/os-x/invisibles.html
+
+*.swp
+
+# *.lock - this is used and abused by many editors for many different things.
+#    For the main ones I use (e.g. Eclipse), it should be excluded 
+#    from source-control, but YMMV
+
+*.lock
+
+#
+# profile - REMOVED temporarily (on double-checking, this seems incorrect; I can't find it in OS X docs?)
+#profile
+
+
+####
+# Xcode temporary files that should never be committed
+# 
+# NB: NIB/XIB files still exist even on Storyboard projects, so we want this...
+
+*~.nib
+
+
+####
+# Xcode build files -
+#
+# NB: slash on the end, so we only remove the FOLDER, not any files that were badly named "DerivedData"
+
+DerivedData/
+
+# NB: slash on the end, so we only remove the FOLDER, not any files that were badly named "build"
+
+build/
+
+
+#####
+# Xcode private settings (window sizes, bookmarks, breakpoints, custom executables, smart groups)
+#
+# This is complicated:
+#
+# SOMETIMES you need to put this file in version control.
+# Apple designed it poorly - if you use "custom executables", they are
+#  saved in this file.
+# 99% of projects do NOT use those, so they do NOT want to version control this file.
+#  ..but if you're in the 1%, comment out the line "*.pbxuser"
+
+# .pbxuser: http://lists.apple.com/archives/xcode-users/2004/Jan/msg00193.html
+
+*.pbxuser
+
+# .mode1v3: http://lists.apple.com/archives/xcode-users/2007/Oct/msg00465.html
+
+*.mode1v3
+
+# .mode2v3: http://lists.apple.com/archives/xcode-users/2007/Oct/msg00465.html
+
+*.mode2v3
+
+# .perspectivev3: http://stackoverflow.com/questions/5223297/xcode-projects-what-is-a-perspectivev3-file
+
+*.perspectivev3
+
+#    NB: also, whitelist the default ones, some projects need to use these
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
+
+
+####
+# Xcode 4 - semi-personal settings
+#
+#
+# OPTION 1: ---------------------------------
+#     throw away ALL personal settings (including custom schemes!
+#     - unless they are "shared")
+#
+# NB: this is exclusive with OPTION 2 below
+xcuserdata
+
+# OPTION 2: ---------------------------------
+#     get rid of ALL personal settings, but KEEP SOME OF THEM
+#     - NB: you must manually uncomment the bits you want to keep
+#
+# NB: this *requires* git v1.8.2 or above; you may need to upgrade to latest OS X,
+#    or manually install git over the top of the OS X version
+# NB: this is exclusive with OPTION 1 above
+#
+#xcuserdata/**/*
+
+#     (requires option 2 above): Personal Schemes
+#
+#!xcuserdata/**/xcschemes/*
+
+####
+# XCode 4 workspaces - more detailed
+#
+# Workspaces are important! They are a core feature of Xcode - don't exclude them :)
+#
+# Workspace layout is quite spammy. For reference:
+#
+# /(root)/
+#   /(project-name).xcodeproj/
+#     project.pbxproj
+#     /project.xcworkspace/
+#       contents.xcworkspacedata
+#       /xcuserdata/
+#         /(your name)/xcuserdatad/
+#           UserInterfaceState.xcuserstate
+#     /xcsshareddata/
+#       /xcschemes/
+#         (shared scheme name).xcscheme
+#     /xcuserdata/
+#       /(your name)/xcuserdatad/
+#         (private scheme).xcscheme
+#         xcschememanagement.plist
+#
+#
+
+####
+# Xcode 4 - Deprecated classes
+#
+# Allegedly, if you manually "deprecate" your classes, they get moved here.
+#
+# We're using source-control, so this is a "feature" that we do not want!
+
+*.moved-aside
+
+####
+# Xcode 5 - VCS file
+# The data in this file not represent state of your project.
+# If you'll leave this file in git - you will have merge conflicts during 
+# pull your cahnges to other's repo
+#
+*.xccheckout
+
+####
+# UNKNOWN: recommended by others, but I can't discover what these files are
+#
+# ...none. Everything is now explained.
+share|edit|flag
+edited Jul 11 at 14:55
+
+answered Aug 18 '12 at 19:22
+
+Adam
+18k868101
+1	
+ 		
+Ok, I just noticed a problem with this. I was doing some git acrobatics, and when I checkout out back to master and applied my stashed changes, I had lost my saved build schemes! fortunately, I had backed them up, just in case... but the solution is to ignore a little more specifically inside the xcuserdata directory. I changed xcuserdata to xcdebugger and UserInterfaceState.xcuserstate, which are really the offensive ones to commit. –  samson Nov 2 '12 at 21:45 
+10	
+ 		
+You shouldn't be ignoring *.lock or Podfile.lock (never mind the redundancy). You want the exact same versions installed in all workspaces, you don't want the "latest version". –  tvon Apr 17 '13 at 13:58
+11	
+ 		
+Please update for Xcode 5! Thanks! –  Hyperbole Oct 8 '13 at 16:18
+4	
+ 		
+Hi! update for Xcode5: Just add *.xccheckout to this file. –  skywinder Nov 11 '13 at 13:38
+3	
+ 		
+@Adam As I can see, this file contains VCS metadata, and should therefore not be checked into the VCS. No, there no mentions on developer.apple.com about xccheckout. But on official github page, this file included already in the gitignore file. https://github.com/github/gitignore/blob/master/Objective-C.gitignore –  skywinder Nov 13 '13 at 4:20 
+add a comment | show 18 more comments
+up vote
+252
+down vote
+Based on this guide for Mercurial my .gitignore includes:
+
+.DS_Store
+*.swp
+*~.nib
+
+build/
+
+*.pbxuser
+*.perspective
+*.perspectivev3
+I've also chosen to include:
+
+*.mode1v3
+*.mode2v3
+which, according to this Apple mailing list post, are "user-specific project settings".
+
+And for Xcode 4:
+
+xcuserdata
+share|edit|flag
+edited Feb 16 '11 at 12:00
+
+answered Sep 8 '08 at 11:14
+
+Hagelin
+6,80441726
+50	
+ 		
+I don't particularly like the .pbxuser/.perspective/*.perspectivev3 patterns. I much prefer the following .xcodeproj/ !*.xcodeproj/project.pbxproj That ignores everything inside a *.xcodeproj except the project.pbxproj. –  Kevin Ballard Mar 15 '09 at 20:33
+5	
+ 		
+I do not ignore *.pbxuser, *.perspective and *.perspectivev3 because I like to keep those settings back when I clone my repository. –  lajos May 27 '09 at 5:57
+7	
+ 		
+Also you might want to add that you can make a "global" gitignore file like this: git config --global core.excludesfile ~/.gitignore –  Jess Bowers Apr 27 '10 at 14:56
+49	
+ 		
+I'd like to caution everyone who added .gitignore file after they have committed the project: those files you ignore are still being tracked. You'll have to remove them from git manually using git rm --cached <files> –  pixelfreak Jun 27 '11 at 1:44
+19	
+ 		
+@SpacyRicochet: Comment formatting has apparently changed since I wrote the comment. Hence the italics. My pattern is supposed to look like *.xcodeproj/* !*.xcodeproj/project.pbxproj. Of course, these days you do need to adjust it for workspaces. –  Kevin Ballard May 10 '12 at 19:14
+add a comment | show 8 more comments
+up vote
+46
+down vote
+For Xcode 4 I also add:
+
+YourProjectName.xcodeproj/xcuserdata/*
+YourProjectName.xcodeproj/project.xcworkspace/xcuserdata/*
+share|edit|flag
+answered Oct 13 '10 at 14:09
+
+Vladimir Mitrovic
+1,177910
+70	
+ 		
+If you just add xcuserdata, then that takes care of both. –  MattDiPasquale Apr 12 '11 at 18:13
+1	
+ 		
+For some reason just adding xcuserdata without the prefix didn't work for me. I thought it should, though. Odd. –  badcat Dec 2 '13 at 14:22
+add a comment
+up vote
+44
+down vote
+Regarding the 'build' directory exclusion -
+
+If you place your build files in a different directory from your source, as I do, you don't have the folder in the tree to worry about.
+
+This also makes life simpler for sharing your code, preventing bloated backups, and even when you have dependencies to other Xcode projects (while require the builds to be in the same directory as each other)
+
+You can grab an up-to-date copy from the Github gist https://gist.github.com/708713
+
+My current .gitignore file is
+
+# Mac OS X
+*.DS_Store
+
+# Xcode
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+
+# Generated files
+*.o
+*.pyc
+
+
+#Python modules
+MANIFEST
+dist/
+build/
+
+# Backup files
+*~.nib
